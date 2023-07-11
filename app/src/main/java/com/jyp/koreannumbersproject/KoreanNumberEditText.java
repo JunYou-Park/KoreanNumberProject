@@ -22,7 +22,14 @@ public class KoreanNumberEditText extends EditText {
             String formatText = formatNumber(s.toString());
             if(!formatText.contentEquals(s)){
                 if(isSubtract){
-                    setSelection(getSelectionStart());
+                    int sHyphenLength = s.toString().replaceAll("[0-9]", "").length();
+                    int formatHyphenLength = formatText.replaceAll("[0-9]", "").length();
+                    int selectionStart = getSelectionStart();
+                    if(sHyphenLength==0 && formatHyphenLength==2){
+                        selectionStart += 2;
+                    }
+                    setText(formatText);
+                    setSelection(Math.min(selectionStart, formatText.length()));
                 }
                 else{
                     setText(formatText);
@@ -31,8 +38,7 @@ public class KoreanNumberEditText extends EditText {
             }
         }
         @Override
-        public void afterTextChanged(Editable s) {
-        }
+        public void afterTextChanged(Editable s) {}
     };
 
     public KoreanNumberEditText(Context context) {
